@@ -7,4 +7,5 @@ public class Constants {
     public static final String BASE_URL = "http://arunsharma.me/sendme/api/v1/";
 
     public static final String WEB_SERVICE_POST = "posts";
+    public static final String WEB_SERVICE_UPLOAD_PHOTO = "uploadPhoto";
 }

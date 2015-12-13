@@ -13,11 +13,29 @@
         android:layout_centerHorizontal="true"
         android:onClick="onPostRequest"/>
 
+    <Button
+        android:id="@+id/btn_get"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="SAMPLE GET REQUEST"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@+id/btn_post"
+        android:onClick="onGetRequest"/>
+
+    <Button
+        android:id="@+id/btn_multipart"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="SAMPLE MULTIPART REQUEST"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@+id/btn_get"
+        android:onClick="onMultiPartRequest"/>
+
     <TextView
         android:id="@+id/response"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/btn_post"
+        android:layout_below="@+id/btn_multipart"
         android:layout_marginTop="10dp"/>
 
 </RelativeLayout>

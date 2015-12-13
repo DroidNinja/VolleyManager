@@ -1,4 +1,4 @@
-package com.binarywalllabs.volleyapimanager.managers.volley;
+package com.binarywalllabs.volleyapimanager.managers.volley.models;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Response;
@@ -6,6 +6,7 @@ import com.android.volley.toolbox.JsonObjectRequest;
 
 import org.json.JSONObject;
 
+import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -22,7 +23,11 @@ public class CustomJsonObjectRequest extends JsonObjectRequest
 
     @Override
     public Map getHeaders() throws AuthFailureError {
-       return headers;
+        if(headers!=null)
+            return headers;
+        else
+            return super.getHeaders();
+
     }
 
 }

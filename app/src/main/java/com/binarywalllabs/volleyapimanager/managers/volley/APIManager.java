@@ -1,23 +1,19 @@
 package com.binarywalllabs.volleyapimanager.managers.volley;
 
-import android.app.ProgressDialog;
 import android.content.Context;
 
-import com.android.volley.AuthFailureError;
 import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonObjectRequest;
-import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.binarywalllabs.volleyapimanager.managers.volley.models.CustomJsonObjectRequest;
+import com.binarywalllabs.volleyapimanager.managers.volley.models.MultipartRequest;
+import com.binarywalllabs.volleyapimanager.managers.volley.models.RequestModel;
 import com.google.gson.Gson;
 
 import org.json.JSONObject;
-
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * Created by Arun on 22-11-2015.
@@ -42,6 +38,11 @@ public class APIManager {
                 break;
 
             case METHOD_TYPE_GET:
+                getData(completeUrl, requestModel);
+                break;
+
+            case METHOD_TYPE_MULTIPART_POST:
+                postMultipartData(completeUrl, requestModel);
                 break;
         }
     }
@@ -54,28 +55,6 @@ public class APIManager {
     //method post to server
     public void postData(String url, final RequestModel requestModel) {
 
-//        final ProgressDialog pDialog = new ProgressDialog(context);
-//        pDialog.setMessage("Loading...");
-//        pDialog.show();
-//
-//        StringRequest stringRequest = new StringRequest(Request.Method.POST,url, new Response.Listener<String>() {
-//            @Override
-//            public void onResponse(String response) {
-//
-//            }
-//        }, new Response.ErrorListener() {
-//            @Override
-//            public void onErrorResponse(VolleyError error) {
-//
-//            }
-//        }){
-//            @Override
-//            protected Map<String,String> getParams(){
-//                return requestModel.postParameters;
-//            }
-//
-//
-//        };
         Gson gson = new Gson();
         String result = gson.toJson(requestModel.postParameters);
         CustomJsonObjectRequest jsonObjectRequest = new CustomJsonObjectRequest(Request.Method.POST,url, result , requestModel.headers,
@@ -100,35 +79,53 @@ public class APIManager {
         queue.add(jsonObjectRequest);
     }
 
+    private void postMultipartData(String completeUrl, final RequestModel requestModel) {
+        MultipartRequest multipartRequest = new MultipartRequest(completeUrl, requestModel.postParameters , requestModel.filesParameters, requestModel.headers,
+                new Response.Listener<String>() {
+
+                    @Override
+                    public void onResponse(String response) {
+                        if(requestModel.volleyCallback!=null)
+                            requestModel.volleyCallback.onSuccess(response);
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                if(requestModel.volleyCallback!=null)
+                    requestModel.volleyCallback.onError(error.getMessage());
+            }
+        });
+
+        multipartRequest.setRetryPolicy(new DefaultRetryPolicy(5000,
+                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+
+        queue.add(multipartRequest);
+    }
+
 
     //get data method
-    public void getData(String url, final VolleyCallback callback) {
+    public void getData(String url, final RequestModel requestModel) {
 
-//        final ProgressDialog pDialog = new ProgressDialog(context); // прогрес бар
-//        pDialog.setMessage("Loading...");
-//        pDialog.show();
-//
-//        JsonObjectRequest getData = new JsonObjectRequest(Request.Method.GET, url, new Response.Listener<JSONObject>() {
-//
-//            @Override
-//            public void onResponse(JSONObject response) {
-//                pDialog.hide(); //скрываем прогресс бар
-//                callback.onSuccess(response); // ответ помещаем в интерфейс
-//            }
-//
-//        }, new Response.ErrorListener() {
-//
-//            @Override
-//            public void onErrorResponse(VolleyError error) {
-//                pDialog.hide(); //скрываем прогресс бар
-//                callback.onError(error.getMessage()); // ответ помещаем в интерфейс
-//            }
-//        });
-//
-//        getData.setRetryPolicy(new DefaultRetryPolicy(5000, //ставим 5 секунт тайм аут
-//                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
-//                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
-//
-//        queue.add(getData); // добавляем наш postData в RequestQueue
+        CustomJsonObjectRequest jsonObjectRequest = new CustomJsonObjectRequest(Request.Method.GET, url, null , requestModel.headers,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        if(requestModel.volleyCallback!=null)
+                            requestModel.volleyCallback.onSuccess(response.toString());
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                if(requestModel.volleyCallback!=null)
+                    requestModel.volleyCallback.onError(error.getMessage());
+            }
+        });
+
+        jsonObjectRequest.setRetryPolicy(new DefaultRetryPolicy(5000,
+                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+
+        queue.add(jsonObjectRequest);
     }
 }

@@ -6,8 +6,9 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
-import com.binarywalllabs.volleyapimanager.managers.volley.ApiModel;
-import com.binarywalllabs.volleyapimanager.managers.volley.PostModel;
+import com.binarywalllabs.volleyapimanager.models.ApiModel;
+import com.binarywalllabs.volleyapimanager.models.MediaModel;
+import com.binarywalllabs.volleyapimanager.models.PostModel;
 import com.binarywalllabs.volleyapimanager.managers.volley.WebServiceManager;
 
 public class MainActivity extends AppCompatActivity {
@@ -50,5 +51,18 @@ public class MainActivity extends AppCompatActivity {
         apiModel.postModel.type = "text";
         apiModel.postModel.regId = "This is registration token";
         WebServiceManager.getInstance().onCreatePost(apiModel);
+    }
+
+    public void onGetRequest(View view) {
+        ApiModel apiModel = new ApiModel();
+        WebServiceManager.getInstance().onGetPosts(apiModel);
+    }
+
+    public void onMultiPartRequest(View view) {
+        ApiModel apiModel = new ApiModel();
+        apiModel.mediaModel = new MediaModel();
+        apiModel.mediaModel.mediaName = "photo";
+        apiModel.mediaModel.filePath = "/storage/sdcard1/Backgrounds/Backgrounds_24554.png";
+        WebServiceManager.getInstance().onUploadPhoto(apiModel);
     }
 }

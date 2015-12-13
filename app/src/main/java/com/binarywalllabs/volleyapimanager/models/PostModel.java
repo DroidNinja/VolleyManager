@@ -1,4 +1,4 @@
-package com.binarywalllabs.volleyapimanager.managers.volley;
+package com.binarywalllabs.volleyapimanager.models;
 
 import com.google.gson.annotations.SerializedName;
 
