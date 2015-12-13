@@ -12,7 +12,7 @@ I have included examples of all types of requests. You can use observer notifica
 
 ### Dependencies Used:
    * compile 'com.mcxiaoke.volley:library:1.0.19' : **Gradle dependency for volley library**
-    * compile 'com.google.code.gson:gson:2.4' : **GSON used for serialization and deserialization of objects**
+   * compile 'com.google.code.gson:gson:2.4' : **GSON used for serialization and deserialization of objects**
 
    **Below dependencies are used for supporting multipart request as all apache stuff has been deprecated in Android 6.0.** [See this](http://developer.android.com/intl/zh-cn/about/versions/marshmallow/android-6.0-changes.html#behavior-apache-http-client)
 > *compile 'org.apache.httpcomponents:httpcore:4.2.4'*   
